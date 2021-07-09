@@ -31,6 +31,10 @@ pipeline {
                 sh './gradlew test'
             }   
         }
-
+        stage('Build JAR') {
+            steps {
+                sh './gradlew shadowJar'
+            }
+        }
     }
 }
