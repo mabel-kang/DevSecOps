@@ -143,7 +143,7 @@ withSonarQubeEnv('sonar') {
 This execute the SonarQube analysis via a regular Gradle task. After the analysis is completed, view the results at http://localhost:9000. 
 
 Prerequisites:
-- Go to **Manage Jenkins** -> **Manage Plugins** and install the **SonarQube Scanner For Jenkins** plugin.
+- Go to **Manage Jenkins** -> **Manage Plugins** -> **Available** and install the **SonarQube Scanner For Jenkins** plugin.
 - Configuration:
   - Go to **Manage Jenkins** -> **Configure System**. Under the **SonarQube servers** section:
      - Select the **Environment variables** option
@@ -162,6 +162,17 @@ plugins {
 }
 ```
 #### 4. OWASP
+```
+dependencyCheck additionalArguments: 'scan="src" --format HTML', odcInstallation: 'OWASP'
+```
+This attempts to detect publicly disclosed vulnerabilities contained within a project's dependencies. The report generated will be available in the **Workspace** of the build.
+
+To access **Workspace**:
+In **Dashboard**, select your pipeline. Under **Build History**, select the build you want to view, then select **Workspace**. 
+
+Prerequisites: 
+- Go to **Manage Jenkins** -> **Manage Plugins** -> **Available** and install the **OWASP Dependency-Check** plugin.
+- Go to **Manage Jenkins** -> **Global Tool Configuration**. Under the **Dependency-Check** section, click **Add Dependency-Check** and add the values you're prompted        for.
 
 ## Creating the pipeline in Jenkins
 
