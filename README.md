@@ -105,7 +105,10 @@ Default username: admin, default password: admin
 #### 1. Git-Checkout
 
 ```
-git branch: 'master', url: 'https://github.com/mabel-kang/ip.git'
+steps {
+    echo 'Checking out from Git Repo';
+    git branch: 'master', url: 'https://github.com/mabel-kang/ip.git'
+}
 ```
 Checks out the github repository that is to be used in the pipeline. The repository used in this tutorial is source code for a JAR application which uses Gradle.
 
@@ -115,9 +118,11 @@ Ensure that the Git Plugin is installed. Otherwise go to **Manage Jenkins** -> *
 #### 2. Check Git Secrets
 
 ```
- sh 'rm trufflehog || true'
- sh 'docker run -t gesellix/trufflehog --json https://github.com/mabel-kang/ip.git > trufflehog'
- sh 'cat trufflehog'
+steps {
+    sh 'rm trufflehog || true'
+    sh 'docker run -t gesellix/trufflehog --json https://github.com/mabel-kang/ip.git > trufflehog'
+    sh 'cat trufflehog'
+}
 ```
 
 `rm trufflehog || true`: removes any file named **trufflehog** if it exists.   
@@ -136,8 +141,10 @@ sudo usermod -aG docker jenkins
 #### 3. SAST
 
 ```
-withSonarQubeEnv('sonar') {
-        sh './gradlew sonarqube'
+steps {
+    withSonarQubeEnv('sonar') {
+            sh './gradlew sonarqube'
+    }
 }
 ```
 This execute the SonarQube analysis via a regular Gradle task. After the analysis is completed, view the results at http://localhost:9000. 
@@ -163,7 +170,9 @@ plugins {
 ```
 #### 4. OWASP
 ```
-dependencyCheck additionalArguments: 'scan="src" --format HTML', odcInstallation: 'OWASP'
+steps {
+    dependencyCheck additionalArguments: 'scan="src" --format HTML', odcInstallation: 'OWASP'
+}
 ```
 This attempts to detect publicly disclosed vulnerabilities contained within a project's dependencies. The report generated will be available in the **Workspace** of the build.
 
@@ -173,6 +182,22 @@ In **Dashboard**, select your pipeline. Under **Build History**, select the buil
 Prerequisites: 
 - Go to **Manage Jenkins** -> **Manage Plugins** -> **Available** and install the **OWASP Dependency-Check** plugin.
 - Go to **Manage Jenkins** -> **Global Tool Configuration**. Under the **Dependency-Check** section, click **Add Dependency-Check** and add the values you're prompted        for.
+
+#### 5. Run JUnit Tests
+```
+steps {
+    sh './gradlew test'
+}   
+```
+This runs all the JUnit tests in the repository. Results will be printed out in **Console Output**.
+
+#### 6. Build JAR
+```
+steps {
+    sh './gradlew shadowJar'
+}   
+```
+This builds the JAR file from the source code.
 
 ## Creating the pipeline in Jenkins
 
