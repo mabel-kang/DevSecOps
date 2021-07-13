@@ -3,7 +3,8 @@
 ## Contents
 1. Overview
 2. Prerequisites 
-3. Setting up Jenkins
+3. Stages of pipeline based on the Jenkinsfile found in this repository
+4. Creating the pipeline in Jenkins
 
 
 ## Overview
@@ -100,17 +101,65 @@ docker run -d --name sonarqube -p 9000:9000 sonarqube
 SonarQube can now be accessed at http://localhost:9000
 Default username: admin, default password: admin 
 
-## Create a pipeline with Jenkins
+## Stages of pipeline based on the Jenkinsfile found in this repository
+1. Git-Checkout
 
-**Jenkins** -> **New Item** -> **Pipeline**
+```
+git branch: 'master', url: 'https://github.com/mabel-kang/ip.git'
+```
+Checks out the github repository that is to be used in the pipeline. The repository used in this tutorial is source code for a JAR application which uses Gradle.
 
-Under **Build Triggers**, 
+Note: 
+
+
+
+2. Check Git Secrets
+
+```
+ sh 'rm trufflehog || true'
+ sh 'docker run -t gesellix/trufflehog --json https://github.com/mabel-kang/ip.git > trufflehog'
+ sh 'cat trufflehog'
+```
+
+`rm trufflehog || true`: removes any file named **trufflehog** if it exists. 
+`docker run -t gesellix/trufflehog --json https://github.com/mabel-kang/ip.git > trufflehog`: runs the trufflehog program in the docker container to check for git secrets in in the repository (https://github.com/mabel-kang/ip.git). Output will be stored in a file named **trufflehog**. 
+`cat trufflehog`: the result of running the program will be shown in **Console Output**. 
+
+To access **Console Output**: 
+In **Dashboard**, select your pipeline. Under **Build History**, select the build you want to view, then select **Console Output**. 
+
+Note:
+Ensure that **jenkins** user is added to the **docker** group in your system so that the docker command can execute
+```
+sudo usermod -aG docker jenkins
+```
+
+
+3. SAST
+
+```
+withSonarQubeEnv('sonar') {
+        sh './gradlew sonarqube'
+}
+```
+
+## Creating the pipeline in Jenkins
+
+**Jenkins** -> **New Item** -> Enter your item name and choose **Pipeline**
+
+Under **Build Triggers**, select **Poll SCM**. Enter `* * * * *` to enable polling every minute so that build will automatically occur when changes in the repository is detected. 
    
-   
-Under **Pipeline**, 
+Under **Pipeline**:
+1. Select **Pipeline script from SCM** for **Definition**
+2. Select **Git** for **SCM**
+3. Enter the URL of your repository that contains your Jenkinsfile for **Repositories**. Add credentials if your repository is private.
+4. Enter the correct branch specifier **Branches to build**
+5. Enter `Jenkinsfile` as the **Script Path**
 
-Select **Definition** as **Pipeline script from SCM**
+If you are using this repository, the pipeline section should look like the following:
+![image](https://user-images.githubusercontent.com/65720353/125407765-c57ca780-e3ec-11eb-9989-a2b41a678309.png)
 
+Choose the **Save** option after you have completed the configuration. The stages of the pipeline will be dependent on the contents of your Jenkinsfile
 
 
 
