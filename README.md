@@ -102,18 +102,17 @@ SonarQube can now be accessed at http://localhost:9000
 Default username: admin, default password: admin 
 
 ## Stages of pipeline based on the Jenkinsfile found in this repository
-1. Git-Checkout
+#### 1. Git-Checkout
 
 ```
 git branch: 'master', url: 'https://github.com/mabel-kang/ip.git'
 ```
 Checks out the github repository that is to be used in the pipeline. The repository used in this tutorial is source code for a JAR application which uses Gradle.
 
-Note: 
+Prerequisites:
+Ensure that the Git Plugin is installed. Otherwise go to **Manage Jenkins** -> **Manage Plugins** and install the Git Plugin.
 
-
-
-2. Check Git Secrets
+#### 2. Check Git Secrets
 
 ```
  sh 'rm trufflehog || true'
@@ -121,27 +120,48 @@ Note:
  sh 'cat trufflehog'
 ```
 
-`rm trufflehog || true`: removes any file named **trufflehog** if it exists. 
-`docker run -t gesellix/trufflehog --json https://github.com/mabel-kang/ip.git > trufflehog`: runs the trufflehog program in the docker container to check for git secrets in in the repository (https://github.com/mabel-kang/ip.git). Output will be stored in a file named **trufflehog**. 
+`rm trufflehog || true`: removes any file named **trufflehog** if it exists.   
+`docker run -t gesellix/trufflehog --json https://github.com/mabel-kang/ip.git > trufflehog`: runs the trufflehog program in the docker container to check for git secrets in in the repository (https://github.com/mabel-kang/ip.git). Output will be stored in a file named **trufflehog**.   
 `cat trufflehog`: the result of running the program will be shown in **Console Output**. 
 
 To access **Console Output**: 
 In **Dashboard**, select your pipeline. Under **Build History**, select the build you want to view, then select **Console Output**. 
 
-Note:
+Prerequisites:
 Ensure that **jenkins** user is added to the **docker** group in your system so that the docker command can execute
 ```
 sudo usermod -aG docker jenkins
 ```
 
-
-3. SAST
+#### 3. SAST
 
 ```
 withSonarQubeEnv('sonar') {
         sh './gradlew sonarqube'
 }
 ```
+This execute the SonarQube analysis via a regular Gradle task. After the analysis is completed, view the results at http://localhost:9000. 
+
+Prerequisites:
+- Go to **Manage Jenkins** -> **Manage Plugins** and install the **SonarQube Scanner For Jenkins** plugin.
+- Configuration:
+  - Go to **Manage Jenkins** -> **Configure System**. Under the **SonarQube servers** section:
+     - Select the **Environment variables** option
+     - Click **Add SonarQube**, and add the values you're prompted for.
+       The server authentication token should be created as a 'Secret Text' credential.
+       Generate your token by going to **User** -> **My Account** > **Security**.
+   - Go to **Manage Jenkins** -> **Global Tool Configuration**. Under the **SonarQube Scanner** section, click **Add SonarQube Scanner** and add the values you're prompted        for.
+- In your **gradle.properties** file, include:
+```
+systemProp.sonar.host.url=http://localhost:9000
+```
+- In your **build.gradle** file, include: 
+```
+plugins {
+  id "org.sonarqube" version "3.3"
+}
+```
+#### 4. OWASP
 
 ## Creating the pipeline in Jenkins
 
