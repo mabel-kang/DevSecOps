@@ -215,7 +215,9 @@ Under **Pipeline**:
 If you are using this repository, the pipeline section should look like the following:
 ![image](https://user-images.githubusercontent.com/65720353/125407765-c57ca780-e3ec-11eb-9989-a2b41a678309.png)
 
-Choose the **Save** option after you have completed the configuration.
+Choose the **Save** option after you have completed the configuration.  
+Due to the polling, the pipeline will automatically build.  
+You can view the progress under the **Stage View**.  
 
 
 
