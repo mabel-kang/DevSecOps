@@ -2,7 +2,7 @@
 
 ## Contents
 1. Overview
-2. Prerequisites 
+2. Install Tools
 3. Pipeline Stages
 4. Creating the pipeline in Jenkins
 
@@ -10,8 +10,8 @@
 ## Overview
 The creation of this pipeline is done on Ubuntu 20.04 locally and the pipeline script can be found in the Jenkinsfile in this repository. 
 
-## Prerequisites
-#### 1. Install Java
+## Install Tools
+#### 1. Java
 ```
 sudo apt update
 sudo apt install openjdk-11-jdk
@@ -21,7 +21,7 @@ Verify the installation:
 java -version
 ```
 
-#### 2. Install Git
+#### 2. Git
 ```
 sudo apt update
 sudo apt install git
@@ -31,7 +31,7 @@ Verify the installation:
 git --version
 ```
 
-#### 3. Install Docker
+#### 3. Docker
 i. Update the apt package index and install packages to allow apt to use a repository over HTTPS:
 ```
  sudo apt-get update
@@ -62,7 +62,7 @@ v. Verify that Docker Engine is installed correctly by running the hello-world i
  sudo docker run hello-world
 ```
 
-#### 4. Install Jenkins
+#### 4. Jenkins
 ```
 wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | sudo apt-key add -
 sudo sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > \
@@ -94,7 +94,7 @@ This documentation is based on proceeding as admin, but there is the option of c
 
 Install suggested plugins when prompted.
 
-#### 5. Install SonarQube
+#### 5. SonarQube
 ```
 docker run -d --name sonarqube -p 9000:9000 sonarqube
 ```
@@ -215,7 +215,7 @@ Under **Pipeline**:
 If you are using this repository, the pipeline section should look like the following:
 ![image](https://user-images.githubusercontent.com/65720353/125407765-c57ca780-e3ec-11eb-9989-a2b41a678309.png)
 
-Choose the **Save** option after you have completed the configuration. The stages of the pipeline will be dependent on the contents of your Jenkinsfile
+Choose the **Save** option after you have completed the configuration.
 
 
 
