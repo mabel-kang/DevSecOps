@@ -14,6 +14,7 @@ pipeline {
                 sh 'cat trufflehog'
             }
         }
+        /*
         stage('SAST') {
             steps{
                 withSonarQubeEnv('sonar') {
@@ -36,5 +37,6 @@ pipeline {
                 sh './gradlew shadowJar'
             }
         }
+        */
     }
 }
