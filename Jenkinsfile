@@ -28,7 +28,7 @@ pipeline {
                 dependencyCheck additionalArguments: 'scan="src" --format HTML', odcInstallation: 'OWASP'
             }
         }
-        /*
+       
         stage('Run JUnit tests') {
             steps {
                 sh './gradlew test'
@@ -39,6 +39,6 @@ pipeline {
                 sh './gradlew shadowJar'
             }
         }
-        */
+        
     }
 }
