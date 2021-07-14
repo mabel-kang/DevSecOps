@@ -14,7 +14,7 @@ pipeline {
                 sh 'cat trufflehog'
             }
         }
-        /*
+        
         stage('SAST') {
             steps{
                 withSonarQubeEnv('sonar') {
@@ -22,6 +22,7 @@ pipeline {
                 }
             }
         }
+        /*
         stage('OWASP') {
             steps {
                 dependencyCheck additionalArguments: 'scan="src" --format HTML', odcInstallation: 'OWASP'
