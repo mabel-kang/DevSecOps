@@ -3,7 +3,7 @@
 ## Contents
 1. Overview
 2. Prerequisites 
-3. Stages of pipeline based on the Jenkinsfile found in this repository
+3. Pipeline Stages
 4. Creating the pipeline in Jenkins
 
 
@@ -101,7 +101,7 @@ docker run -d --name sonarqube -p 9000:9000 sonarqube
 SonarQube can now be accessed at http://localhost:9000
 Default username: admin, default password: admin 
 
-## Stages of pipeline based on the Jenkinsfile found in this repository
+## Pipeline Stages (based on the Jenkinsfile in this repository)
 #### 1. Git-Checkout
 
 ```
