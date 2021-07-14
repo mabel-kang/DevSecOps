@@ -8,7 +8,7 @@
 
 
 ## Overview
-The creation of this pipeline is done on Ubuntu 20.04 locally and the pipeline script can be found in the Jenkinsfile in this repository. 
+The creation of this pipeline is done on Ubuntu 20.04 locally (VirtualBox) and the pipeline script can be found in the Jenkinsfile in this repository. 
 
 ## Install Tools
 #### 1. Java
