@@ -88,7 +88,7 @@ Jenkins can now be accessed at http://localhost:8080
 
 Login to Jenkins by obtaining the password from:
 ```
-sudo cat /var/lib/Jenkins/secrets/initialAdminPassword
+sudo cat /var/lib/jenkins/secrets/initialAdminPassword
 ```
 This documentation is based on proceeding as admin, but there is the option of creating a new user for Jenkins. 
 
