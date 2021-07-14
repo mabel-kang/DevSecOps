@@ -96,7 +96,7 @@ Install suggested plugins when prompted.
 
 #### 5. SonarQube
 ```
-docker run -d --name sonarqube -p 9000:9000 sonarqube
+sudo docker run -d --name sonarqube -p 9000:9000 sonarqube
 ```
 SonarQube can now be accessed at http://localhost:9000
 Default username: admin, default password: admin 
