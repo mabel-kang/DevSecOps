@@ -35,9 +35,12 @@ pipeline {
             }   
         }
         stage('Build JAR') {
-            steps {
-                sh './gradlew shadowJar'
-            }
+            when {
+                expression { choice == "build" }
+                }
+                steps {
+                    sh './gradlew shadowJar'
+                }
         }
         
     }
