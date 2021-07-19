@@ -105,9 +105,11 @@ Default username: admin, default password: admin
 #### 1. Git-Checkout
 
 ```
-steps {
-    echo 'Checking out from Git Repo';
-    git branch: 'master', url: 'https://github.com/mabel-kang/ip.git'
+stage('Git-Checkout') {
+   steps {
+       echo 'Checking out from Git Repo';
+       git branch: 'master', url: 'https://github.com/mabel-kang/ip.git'
+   }
 }
 ```
 Checks out the github repository that is to be used in the pipeline. The repository used in this tutorial is source code for a JAR application which uses Gradle.
@@ -118,10 +120,12 @@ Ensure that the Git Plugin is installed. Otherwise go to **Manage Jenkins** -> *
 #### 2. Check Git Secrets
 
 ```
-steps {
-    sh 'rm trufflehog || true'
-    sh 'docker run -t gesellix/trufflehog --json https://github.com/mabel-kang/ip.git > trufflehog'
-    sh 'cat trufflehog'
+stage('Check Git Secrets') {
+   steps {
+       sh 'rm trufflehog || true'
+       sh 'docker run -t gesellix/trufflehog --json https://github.com/mabel-kang/ip.git > trufflehog'
+       sh 'cat trufflehog'
+   }
 }
 ```
 
@@ -133,18 +137,23 @@ To access **Console Output**:
 In **Dashboard**, select your pipeline. Under **Build History**, select the build you want to view, then select **Console Output**. 
 
 Prerequisites:
-Ensure that **jenkins** user is added to the **docker** group in your system so that the docker command can execute
+Ensure that **jenkins** user and your user are added to the **docker** group in your system so that the docker command can execute and restart jenkins for the changes to take effect.
 ```
 sudo usermod -aG docker jenkins
+sudo usermod -aG docker $USER
+newgrp docker
+sudo systemctl restart jenkins
 ```
 
 #### 3. SAST
 
 ```
-steps {
-    withSonarQubeEnv('sonar') {
-            sh './gradlew sonarqube'
-    }
+stage('SAST') {
+   steps {
+       withSonarQubeEnv('sonar') {
+               sh './gradlew sonarqube'
+       }
+   }
 }
 ```
 This execute the SonarQube analysis via a regular Gradle task. After the analysis is completed, view the results at http://localhost:9000. 
@@ -170,8 +179,10 @@ plugins {
 ```
 #### 4. OWASP
 ```
-steps {
-    dependencyCheck additionalArguments: 'scan="src" --format HTML', odcInstallation: 'OWASP'
+stage('OWASP') {
+   steps {
+       dependencyCheck additionalArguments: 'scan="src" --format HTML', odcInstallation: 'OWASP'
+   }
 }
 ```
 This attempts to detect publicly disclosed vulnerabilities contained within a project's dependencies. The report generated will be available in the **Workspace** of the build.
@@ -185,9 +196,11 @@ Prerequisites:
 
 #### 5. Run JUnit Tests
 ```
-steps {
-    sh './gradlew test'
-}   
+stage('Run JUnit tests') {
+   steps {
+       sh './gradlew test'
+   }   
+}
 ```
 This runs all the JUnit tests in the repository. Results will be printed out in **Console Output**.
 
