@@ -42,6 +42,13 @@ pipeline {
                     sh './gradlew shadowJar'
                 }
         }
-        
+        stage('Skip build') {
+            when {
+                expression { choice == "ignore" }
+                }
+                steps {
+                    echo 'Did not build JAR';
+                }
+        } 
     }
 }
