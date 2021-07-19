@@ -193,15 +193,38 @@ This runs all the JUnit tests in the repository. Results will be printed out in 
 
 #### 6. Build JAR
 ```
-steps {
-    sh './gradlew shadowJar'
-}   
+stage('Build JAR') {
+     when {
+           expression { choice == "build" }
+          }
+          steps {
+            sh './gradlew shadowJar'
+          }
+}  
 ```
-This builds the JAR file from the source code.
+When this pipeline is built with the value: `build` for the parameter: `choice`, the JAR file will be built from the source code. Else, this stage will be skipped.
+
+#### 7. Skip build
+```
+stage('Skip build') {
+     when {
+           expression { choice == "ignore" }
+          }
+           steps {
+             echo 'Did not build JAR';
+           }
+}
+```
+When this pipeline is built with the value: `ignore` for the parameter: `choice`, the steps in this stage will be executed. 
+       
 
 ## Creating the pipeline in Jenkins
 
 **Jenkins** -> **New Item** -> Enter your item name and choose **Pipeline**
+
+Under **General**, select **This project is parameterized**. Enter `choice` as **Name** and `build` and `ignore` under **Choices**.  
+
+![image](https://user-images.githubusercontent.com/65720353/126123928-f6c10ad6-f90e-469c-ac27-c1dc87bd429e.png)
 
 Under **Build Triggers**, select **Poll SCM**. Enter `* * * * *` to enable polling every minute so that build will automatically occur when changes in the repository is detected. 
    
@@ -212,7 +235,6 @@ Under **Pipeline**:
 4. Enter the correct branch specifier **Branches to build**
 5. Enter `Jenkinsfile` as the **Script Path**
 
-If you are using this repository, the pipeline section should look like the following:
 ![image](https://user-images.githubusercontent.com/65720353/125407765-c57ca780-e3ec-11eb-9989-a2b41a678309.png)
 
 Choose the **Save** option after you have completed the configuration.  
