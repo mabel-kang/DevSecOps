@@ -108,7 +108,7 @@ Default username: admin, default password: admin
 stage('Git-Checkout') {
    steps {
        echo 'Checking out from Git Repo';
-       git branch: 'master', url: 'https://github.com/mabel-kang/ip.git'
+       git branch: 'master', url: '{your-git-repo-web-url}'
    }
 }
 ```
@@ -123,14 +123,14 @@ Ensure that the Git Plugin is installed. Otherwise go to **Manage Jenkins** -> *
 stage('Check Git Secrets') {
    steps {
        sh 'rm trufflehog || true'
-       sh 'docker run -t gesellix/trufflehog --json https://github.com/mabel-kang/ip.git > trufflehog'
+       sh 'docker run -t gesellix/trufflehog --json {your-git-repo-web-url} > trufflehog'
        sh 'cat trufflehog'
    }
 }
 ```
 
 `rm trufflehog || true`: removes any file named **trufflehog** if it exists.   
-`docker run -t gesellix/trufflehog --json https://github.com/mabel-kang/ip.git > trufflehog`: runs the trufflehog program in the docker container to check for git secrets in in the repository (https://github.com/mabel-kang/ip.git). Output will be stored in a file named **trufflehog**.   
+`docker run -t gesellix/trufflehog --json {your-git-repo-web-url} > trufflehog`: runs the trufflehog program in the docker container to check for git secrets in in the repository specified. Output will be stored in a file named **trufflehog**.   
 `cat trufflehog`: the result of running the program will be shown in **Console Output**. 
 
 To access **Console Output**: 
@@ -156,7 +156,7 @@ stage('SAST') {
    }
 }
 ```
-This execute the SonarQube analysis via a regular Gradle task. After the analysis is completed, view the results at http://localhost:9000. 
+This execute the SonarQube analysis via a regular Gradle task (if your project uses Gradle). After the analysis is completed, view the results at http://localhost:9000. 
 
 Prerequisites:
 - Go to **Manage Jenkins** -> **Manage Plugins** -> **Available** and install the **SonarQube Scanner For Jenkins** plugin.
