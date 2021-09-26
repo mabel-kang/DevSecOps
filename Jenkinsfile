@@ -4,13 +4,13 @@ pipeline {
         stage('Git-Checkout') {
             steps {
                 echo 'Checking out from Git Repo';
-                git branch: 'master', url: 'https://github.com/mabel-kang/ip.git'
+                git branch: 'master', url: '{your-git-repo-web-url}'
             }
         }
         stage('Check Git Secrets') {
             steps {
                 sh 'rm trufflehog || true'
-                sh 'docker run -t gesellix/trufflehog --json https://github.com/mabel-kang/ip.git > trufflehog'
+                sh 'docker run -t gesellix/trufflehog --json {your-git-repo-web-url} > trufflehog'
                 sh 'cat trufflehog'
             }
         }
