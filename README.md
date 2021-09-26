@@ -108,7 +108,7 @@ Default username: admin, default password: admin
 stage('Git-Checkout') {
    steps {
        echo 'Checking out from Git Repo';
-       git branch: 'master', url: '{your-git-repo-web-url}'
+       git branch: 'master', url: 'https://github.com/mabel-kang/ip.git'
    }
 }
 ```
@@ -123,14 +123,14 @@ Ensure that the Git Plugin is installed. Otherwise go to **Manage Jenkins** -> *
 stage('Check Git Secrets') {
    steps {
        sh 'rm trufflehog || true'
-       sh 'docker run -t gesellix/trufflehog --json {your-git-repo-web-url} > trufflehog'
+       sh 'docker run -t gesellix/trufflehog --json https://github.com/mabel-kang/ip.git > trufflehog'
        sh 'cat trufflehog'
    }
 }
 ```
 
 `rm trufflehog || true`: removes any file named **trufflehog** if it exists.   
-`docker run -t gesellix/trufflehog --json {your-git-repo-web-url} > trufflehog`: runs the trufflehog program in the docker container to check for git secrets in in the repository specified. Output will be stored in a file named **trufflehog**.   
+`docker run -t gesellix/trufflehog --json https://github.com/mabel-kang/ip.git > trufflehog`: runs the trufflehog program in the docker container to check for git secrets in the repository specified. Output will be stored in a file named **trufflehog**.   
 `cat trufflehog`: the result of running the program will be shown in **Console Output**. 
 
 To access **Console Output**: 
