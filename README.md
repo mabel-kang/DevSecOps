@@ -254,8 +254,7 @@ Choose the **Save** option after you have completed the configuration.
 Due to the polling, the pipeline will automatically build.  
 You can view the progress under the **Stage View**.  
 
-
-
-
-
-
+References:
+https://www.jenkins.io/doc/book/
+https://docs.sonarqube.org/latest/
+https://www.youtube.com/playlist?list=PLjNII-Jkdjfz5EXWlGMBRk63PC8uJsHMo
